@@ -23,7 +23,7 @@ UnitConverterDataLoader::UnitConverterDataLoader(GeographicRegion ^ region)
 {
     m_categoryList = make_shared<vector<UCM::Category>>();
     m_categoryToUnits = make_shared<UCM::CategoryToUnitVectorMap>();
-    m_ratioMap = make_shared<UCM::UnitToUnitToConversionDataMap>();
+    m_ratioMap = make_shared<UCM::UnitToUnitToConversionDataMap>();    
 }
 
 vector<UCM::Category> UnitConverterDataLoader::LoadOrderedCategories()
@@ -958,6 +958,7 @@ wstring UnitConverterDataLoader::GetLocalizedStringName(String ^ stringId)
 
 void UnitConverterDataLoader::GetExplicitConversionData(_In_ unordered_map<int, unordered_map<int, UCM::ConversionData>>& unitToUnitConversionList)
 {
+    //here's one. this is only used in 
     /* categoryId, ParentUnitId, UnitId, ratio, offset, offsetfirst*/
     ExplicitUnitConversionData conversionDataList[] = {
         { ViewMode::Temperature, UnitConverterUnits::Temperature_DegreesCelsius, UnitConverterUnits::Temperature_DegreesCelsius, 1, 0 },

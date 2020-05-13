@@ -626,7 +626,7 @@ task<void> CurrencyDataLoader::FinalizeUnits(_In_ const vector<UCM::CurrencyStat
 
                 bool isConversionTarget = (toCurrency == currencyUnit.currencyCode);
                 isConversionTargetSet = isConversionTargetSet || isConversionTarget;
-
+                //ctor
                 UCM::Unit unit = UCM::Unit{
                     id,                        // id
                     currencyUnit.currencyName, // currencyName

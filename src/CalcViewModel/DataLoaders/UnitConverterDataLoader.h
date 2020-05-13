@@ -23,7 +23,7 @@ namespace CalculatorApp
                 int order,
                 bool isConversionSource = false,
                 bool isConversionTarget = false,
-                bool isWhimsical = false)
+                bool isWhimsical = false)// ctor
                 : UnitConversionManager::Unit(id, name, abbreviation, isConversionSource, isConversionTarget, isWhimsical)
                 , order(order)
             {

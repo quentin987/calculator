@@ -18,7 +18,13 @@ namespace UnitConversionManager
         Unit()
         {
         }
-        Unit(int id, std::wstring_view name, std::wstring abbreviation, bool isConversionSource, bool isConversionTarget, bool isWhimsical)
+        Unit(int id,
+            std::wstring_view name,
+            std::wstring abbreviation,
+            bool isConversionSource,
+            bool isConversionTarget,
+            bool isWhimsical,
+            double factor)
             : id(id)
             , name(name)
             , accessibleName(name)
@@ -26,6 +32,7 @@ namespace UnitConversionManager
             , isConversionSource(isConversionSource)
             , isConversionTarget(isConversionTarget)
             , isWhimsical(isWhimsical)
+            , factor(factor)
         {
         }
 
@@ -36,12 +43,14 @@ namespace UnitConversionManager
             std::wstring abbreviation,
             bool isRtlLanguage,
             bool isConversionSource,
-            bool isConversionTarget)
+            bool isConversionTarget,
+            double factor)
             : id(id)
             , abbreviation(std::move(abbreviation))
             , isConversionSource(isConversionSource)
             , isConversionTarget(isConversionTarget)
             , isWhimsical(false)
+            , factor(factor)
         {
             auto nameValue1 = isRtlLanguage ? currencyName : countryName;
             auto nameValue2 = isRtlLanguage ? countryName : currencyName;
@@ -60,6 +69,7 @@ namespace UnitConversionManager
         bool isConversionSource;
         bool isConversionTarget;
         bool isWhimsical;
+        double factor;
 
         bool operator!=(const Unit& that) const
         {
@@ -77,7 +87,8 @@ namespace UnitConversionManager
     // null checks.
     //
     // unitId, name, abbreviation, isConversionSource, isConversionTarget, isWhimsical
-    inline const Unit EMPTY_UNIT = Unit{ -1, L"", L"", true, true, false };
+    //ctor todo remove
+    inline const Unit EMPTY_UNIT = Unit{ -1, L"", L"", true, true, false, -1 };
 
     struct Category
     {
