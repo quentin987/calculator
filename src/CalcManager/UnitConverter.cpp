@@ -76,11 +76,11 @@ void UnitConverter::Initialize()
 
 bool UnitConverter::CheckLoad()
 {
-    if (m_categories.empty())
+    if (m_dataLoader->GetOrderedCategories().empty())
     {
-        ResetCategoriesAndRatios();
+        this->ResetCategoriesAndRatios();
     }
-    return !m_categories.empty();
+    return !m_dataLoader->GetOrderedCategories().empty();
 }
 
 /// <summary>
@@ -88,8 +88,8 @@ bool UnitConverter::CheckLoad()
 /// </summary>
 vector<Category> UnitConverter::GetCategories()
 {
-    CheckLoad();
-    return m_categories;
+    this->CheckLoad();
+    return m_dataLoader->GetOrderedCategories();
 }
 
 /// <summary>
@@ -109,7 +109,7 @@ CategorySelectionInitializer UnitConverter::SetCurrentCategory(const Category& i
     {
         if (m_currentCategory.id != input.id)
         {
-            for (auto& unit : m_categoryToUnits[m_currentCategory])
+            for (auto& unit : m_categoryToUnits[m_currentCategory.id])
             {
                 unit.isConversionSource = (unit.id == m_fromType.id);
                 unit.isConversionTarget = (unit.id == m_toType.id);
@@ -121,7 +121,7 @@ CategorySelectionInitializer UnitConverter::SetCurrentCategory(const Category& i
             }
         }
 
-        newUnitList = m_categoryToUnits[input];
+        newUnitList = m_categoryToUnits[input.id];
     }
 
     InitializeSelectedUnits();
@@ -283,7 +283,7 @@ void UnitConverter::RestoreUserPreferences(wstring_view userPreferences)
     m_currentCategory = StringToCategory(outerTokens[2]);
 
     // Only restore from the saved units if they are valid in the current available units.
-    auto itr = m_categoryToUnits.find(m_currentCategory);
+    auto itr = m_categoryToUnits.find(m_currentCategory.id);
     if (itr != m_categoryToUnits.end())
     {
         const auto& curUnits = itr->second;
@@ -713,21 +713,19 @@ vector<tuple<wstring, Unit>> UnitConverter::CalculateSuggested()
 /// </summary>
 void UnitConverter::ResetCategoriesAndRatios()
 {
-    m_categories = m_dataLoader->LoadOrderedCategories();
-
     m_switchedActive = false;
-
-    if (m_categories.empty())
+    auto unitCategories = m_dataLoader->GetOrderedCategories();
+    if (unitCategories.empty())
     {
         return;
     }
 
-    m_currentCategory = m_categories[0];
+    m_currentCategory = unitCategories[0];
 
     m_categoryToUnits.clear();
     m_ratioMap.clear();
     bool readyCategoryFound = false;
-    for (const Category& category : m_categories)
+    for (const Category& category : unitCategories)
     {
         shared_ptr<IConverterDataLoader> activeDataLoader = GetDataLoaderForCategory(category);
         if (activeDataLoader == nullptr)
@@ -738,8 +736,8 @@ void UnitConverter::ResetCategoriesAndRatios()
             continue;
         }
 
-        vector<Unit> units = activeDataLoader->LoadOrderedUnits(category);
-        m_categoryToUnits[category] = units;
+        vector<Unit> units = activeDataLoader->GetOrderedUnits(category);
+        m_categoryToUnits[category.id] = units;
 
         // Just because the units are empty, doesn't mean the user can't select this category,
         // we just want to make sure we don't let an unready category be the default.
@@ -789,7 +787,7 @@ void UnitConverter::InitializeSelectedUnits()
         return;
     }
 
-    auto itr = m_categoryToUnits.find(m_currentCategory);
+    auto itr = m_categoryToUnits.find(m_currentCategory.id);
     if (itr == m_categoryToUnits.end())
     {
         return;
