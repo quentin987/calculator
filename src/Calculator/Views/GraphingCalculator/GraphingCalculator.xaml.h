@@ -41,7 +41,7 @@ public ref class GraphingCalculator sealed : public Windows::UI::Xaml::Data::INo
         static Platform::String ^ GetInfoForSwitchModeToggleButton(bool isChecked);
         static Windows::UI::Xaml::Visibility ManageEditVariablesButtonVisibility(unsigned int numberOfVariables);
         static Platform::String ^ GetTracingLegend(Platform::IBox<bool> ^ isTracing);
-
+        static int GetPrecision(double min, double max);
         void SetDefaultFocus();
     private:
         void GraphingCalculator_DataContextChanged(Windows::UI::Xaml::FrameworkElement ^ sender, Windows::UI::Xaml::DataContextChangedEventArgs ^ args);
@@ -55,7 +55,7 @@ public ref class GraphingCalculator sealed : public Windows::UI::Xaml::Data::INo
         void OnZoomOutCommand(Object ^ parameter);
 
         void OnShareClick(Platform::Object ^ sender, Windows::UI::Xaml::RoutedEventArgs ^ e);
-
+        
         void OnShowTracePopupChanged(bool newValue);
         void OnTracePointChanged(Windows::Foundation::Point newPoint);
         void OnPointerPointChanged(Windows::Foundation::Point newPoint);

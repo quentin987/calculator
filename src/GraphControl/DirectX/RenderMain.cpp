@@ -159,9 +159,14 @@ namespace GraphControl::DX
             int formulaId = -1;
             float nearestPointLocationX, nearestPointLocationY;
             double nearestPointValueX, nearestPointValueY, rhoValueOut, thetaValueOut, tValueOut;
+            double xAxisMin, xAxisMax, yAxisMin, yAxisMax;
+            
+            m_graph->GetRenderer()->GetDisplayRanges(xAxisMin, xAxisMax, xAxisMin, yAxisMax);
+            auto precision = static_cast<double>(floor(log10(xAxisMax - xAxisMin)) - 3);
             m_Tracing = m_graph->GetRenderer()->GetClosePointData(
                             trackPoint.X,
                             trackPoint.Y,
+                            precision,
                             formulaId,
                             nearestPointLocationX,
                             nearestPointLocationY,
@@ -299,10 +304,14 @@ namespace GraphControl::DX
                         int formulaId = -1;
                         float nearestPointLocationX, nearestPointLocationY;
                         double nearestPointValueX, nearestPointValueY, rhoValueOut, thetaValueOut, tValueOut;
+                        double xAxisMin, xAxisMax, yAxisMin, yAxisMax;
 
+                        m_graph->GetRenderer()->GetDisplayRanges(xAxisMin, xAxisMax, xAxisMin, yAxisMax);
+                        auto precision = static_cast<double>(floor(log10(xAxisMax - xAxisMin)) - 3);
                         if (renderer->GetClosePointData(
                                 trackPoint.X,
                                 trackPoint.Y,
+                                precision,
                                 formulaId,
                                 nearestPointLocationX,
                                 nearestPointLocationY,

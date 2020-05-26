@@ -211,8 +211,7 @@ wstringstream GraphingCalculator::FormatTraceValue(double min, double max, float
 {
     wstringstream traceValueString;
 
-    // Extract precision we will round to
-    auto precision = static_cast<int>(floor(log10(max - min)) - 3);
+    auto precision = GraphingCalculator::GetPrecision(min, max);
 
     // Determine if we want to show scientific notation instead
     if (precision <= -7 || precision >= 7)
@@ -302,6 +301,12 @@ void GraphingCalculator::OnShareClick(Object ^ sender, RoutedEventArgs ^ e)
             throw;
         }
     }
+}
+
+int GraphingCalculator::GetPrecision(double min, double max)
+{
+    // Extract precision we will round to
+    return static_cast<int>(floor(log10(max - min)) - 3);
 }
 
 // When share is invoked (by the user or programmatically) the event handler we registered will be called to populate the data package with the
